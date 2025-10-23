@@ -4,6 +4,10 @@ import cors from "cors";
 import connectDB from "./config/db.mjs";
 import userRoutes from "./routes/userRoutes.mjs";
 import { errorHandler } from "./middleware/errorMiddleware.mjs";
+import transactionRoutes from "./routes/transactionRoutes.mjs";
+import approvalRoutes from "./routes/approvalRoutes.mjs";
+
+
 
 dotenv.config();
 connectDB();
@@ -13,6 +17,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", userRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/approvals", approvalRoutes);
 
 // simple root
 app.get("/", (req, res) => res.send("Backend running"));

@@ -1,5 +1,5 @@
 import Transaction from "../models/transaction.mjs";
-import Approval from "../models/approval.mjs"; // ✅ Import this
+import Approval from "../models/approvals.mjs"; // ✅ Import this
 
 // 🔹 Create a new transaction + auto approval request
 export const createTransaction = async (req, res, next) => {
@@ -18,7 +18,7 @@ export const createTransaction = async (req, res, next) => {
       type,
       price,
       description,
-      date: date || Date.now(),
+      date: date || new Date(),
     });
 
     // ✅ Automatically create a linked approval request

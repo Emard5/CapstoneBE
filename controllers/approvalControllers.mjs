@@ -1,14 +1,39 @@
 import Approval from "../models/approval.mjs";
 import Transaction from "../models/transaction.mjs";
 
-// 🔹 Get all approvals (for admins or managers)
+// 🔹 Request approval for a transaction
+export const requestApproval = async (req, res, next) => {
+  try {
+    const { transactionId, notes } = req.body;
+
+    const transaction = await Transaction.findOne({
+      _id: transactionId,
+      userId: req.user.id,
+    });
+
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
+    const approval = await Approval.create({
+      transaction: transactionId,
+      requestedBy: req.user.id,
+      notes,
+    });
+
+    res.status(201).json(approval);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// 🔹 Get all approvals (admin or user)
 export const getApprovals = async (req, res, next) => {
   try {
-    // You can later add role-based filtering (e.g., if user.isAdmin)
     const approvals = await Approval.find()
-      .populate("transaction", "title category type price date")
-      .populate("requestedBy", "name email")
-      .populate("approvedBy", "name email")
+      .populate("transaction")
+      .populate("requestedBy", "username email")
+      .populate("approvedBy", "username email")
       .sort({ createdAt: -1 });
 
     res.json(approvals);
@@ -17,59 +42,24 @@ export const getApprovals = async (req, res, next) => {
   }
 };
 
-// 🔹 Get pending approvals only
-export const getPendingApprovals = async (req, res, next) => {
+// 🔹 Approve or reject an approval request
+export const updateApprovalStatus = async (req, res, next) => {
   try {
-    const approvals = await Approval.find({ status: "pending" })
-      .populate("transaction", "title category type price date")
-      .populate("requestedBy", "name email")
-      .sort({ createdAt: -1 });
+    const { status, notes } = req.body;
 
-    res.json(approvals);
-  } catch (err) {
-    next(err);
-  }
-};
+    const approval = await Approval.findById(req.params.id);
 
-// 🔹 Approve a transaction
-export const approveTransaction = async (req, res, next) => {
-  try {
-    const approval = await Approval.findById(req.params.id).populate("transaction");
+    if (!approval) {
+      return res.status(404).json({ message: "Approval not found" });
+    }
 
-    if (!approval) return res.status(404).json({ message: "Approval not found" });
-
-    // Update approval status
-    approval.status = "approved";
+    approval.status = status;
+    approval.notes = notes || approval.notes;
     approval.approvedBy = req.user.id;
+
     await approval.save();
 
-    // Optionally mark transaction as approved
-    approval.transaction.status = "approved";
-    await approval.transaction.save();
-
-    res.json({ message: "Transaction approved successfully", approval });
-  } catch (err) {
-    next(err);
-  }
-};
-
-// 🔹 Reject a transaction
-export const rejectTransaction = async (req, res, next) => {
-  try {
-    const approval = await Approval.findById(req.params.id).populate("transaction");
-
-    if (!approval) return res.status(404).json({ message: "Approval not found" });
-
-    approval.status = "rejected";
-    approval.approvedBy = req.user.id;
-    approval.notes = req.body.notes || "No reason provided";
-    await approval.save();
-
-    // Optionally mark transaction as rejected
-    approval.transaction.status = "rejected";
-    await approval.transaction.save();
-
-    res.json({ message: "Transaction rejected", approval });
+    res.json(approval);
   } catch (err) {
     next(err);
   }

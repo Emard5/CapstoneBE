@@ -1,17 +1,27 @@
 import express from "express";
-import { verifyToken } from "../middleware/authMiddleware.mjs";
 import {
+  getApprovals,
   getPendingApprovals,
-  updateApprovalStatus,
-  createApprovalRequest,
+  approveTransaction,
+  rejectTransaction,
 } from "../controllers/approvalControllers.mjs";
+import { verifyToken } from "../middleware/authMiddleware.mjs";
 
 const router = express.Router();
 
+// All routes protected
 router.use(verifyToken);
 
-router.get("/", getPendingApprovals);
-router.post("/", createApprovalRequest);
-router.put("/:id", updateApprovalStatus);
+// Get all approvals
+router.get("/", getApprovals);
+
+// Get pending approvals
+router.get("/pending", getPendingApprovals);
+
+// Approve transaction
+router.put("/:id/approve", approveTransaction);
+
+// Reject transaction
+router.put("/:id/reject", rejectTransaction);
 
 export default router;

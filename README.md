@@ -24,7 +24,15 @@ A full-stack MERN application that allows users to manage financial transactions
 | PUT    | `/api/approvals/:id/approve` | Approve a transaction by ID | Yes |
 | PUT    | `/api/approvals/:id/reject` | Reject a transaction by ID | Yes |
 
+## Transactions API Endpoints
 
+| Method | Endpoint | Description | Auth Required |
+|--------|---------|-------------|---------------|
+| POST   | `/api/transactions` | Create a new transaction | Yes |
+| GET    | `/api/transactions` | Get all user transactions | Yes |
+| GET    | `/api/transactions/:id` | Get one transaction by ID | Yes |
+| PUT    | `/api/transactions/:id` | Update a transaction | Yes |
+| DELETE | `/api/transactions/:id` | Delete a transaction | Yes |
 
 [## Installation & Setup
 ```bash

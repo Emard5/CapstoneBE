@@ -34,6 +34,16 @@ A full-stack MERN application that allows users to manage financial transactions
 | PUT    | `/api/transactions/:id` | Update a transaction | Yes |
 | DELETE | `/api/transactions/:id` | Delete a transaction | Yes |
 
+## Users / Authentication API Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|---------|-------------|---------------|
+| POST   | `/api/users/register` | Register a new user | No |
+| POST   | `/api/users/login` | Login user | No |
+| GET    | `/api/users/me` | Get logged-in user details | Yes |
+| PUT    | `/api/users/me` | Update logged-in user info | Yes | 
+
+
 [## Installation & Setup
 ```bash
 git clone <repo>

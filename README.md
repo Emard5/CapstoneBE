@@ -1,5 +1,5 @@
 FrontEnd : 
-# Finance Manager App
+# Budget Tracker/Finance Manager App
 
 A full-stack MERN application that allows users to manage financial transactions with an admin approval workflow.
 

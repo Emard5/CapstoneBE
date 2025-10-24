@@ -1,43 +1,40 @@
 import Transaction from "../models/transaction.mjs";
-import Approval from "../models/approvals.mjs"; // ✅ Import this
+import Approval from "../models/approvals.mjs"; // ✅ makes approval entries
 
 // 🔹 Create a new transaction + auto approval request
 export const createTransaction = async (req, res, next) => {
   try {
-    const { title, category, type, price, date, description } = req.body;
+    const { title, category, type, price, date } = req.body;
 
     if (!title || !category || !type || !price) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // ✅ Create transaction
+    // 1) Create the transaction
     const transaction = await Transaction.create({
       userId: req.user.id,
       title,
       category,
       type,
       price,
-      description,
-      date: date || new Date(),
+      date: date ? new Date(date) : new Date(),
     });
 
-    // ✅ Automatically create a linked approval request
+    // 2) Create pending approval
     await Approval.create({
-      transaction: transaction._id,
-      requestedBy: req.user.id,
+      transaction: transaction._id,   // ✅ schema field
+      requestedBy: req.user.id,      // ✅ schema field
       status: "pending",
     });
 
-    res.status(201).json({
-      message: "Transaction created successfully and approval pending",
-      transaction,
-    });
+    res.status(201).json(transaction);
   } catch (err) {
     next(err);
   }
 };
 
-// 🔹 Get all transactions for logged-in user
+
+// 🔹 Get all transactions for the logged-in user
 export const getTransactions = async (req, res, next) => {
   try {
     const transactions = await Transaction.find({ userId: req.user.id }).sort({ date: -1 });

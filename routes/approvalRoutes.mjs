@@ -6,11 +6,13 @@ import {
   rejectTransaction,
 } from "../controllers/approvalControllers.mjs";
 import { verifyToken } from "../middleware/authMiddleware.mjs";
+import { isAdmin } from "../middleware/isAdmin.mjs";
 
 const router = express.Router();
 
-// All routes protected
+// All routes protected and admin-only
 router.use(verifyToken);
+router.use(isAdmin);
 
 // Get all approvals
 router.get("/", getApprovals);

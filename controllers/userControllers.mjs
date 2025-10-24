@@ -7,7 +7,7 @@ const generateToken = (user) =>
 
 export const registerUser = async (req, res, next) => {
   try {
-    const { name, email, password, currencyType } = req.body;
+    const { name, email, password, currencyType, role } = req.body;
     if (!name || !email || !password) return res.status(400).json({ message: "Missing fields" });
 
     const existing = await User.findOne({ email });
@@ -21,7 +21,8 @@ export const registerUser = async (req, res, next) => {
       email,
       password: hashed,
       currencyType: currencyType || undefined,
-      accountTotal: 0
+      accountTotal: 0,
+      role: role === "admin" ? "admin" : "user"
     });
 
     const token = generateToken(user);

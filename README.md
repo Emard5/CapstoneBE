@@ -15,7 +15,9 @@ A full-stack MERN application that allows users to manage financial transactions
 - Admin approval dashboard
 - Error handling middleware
 
-## Approvals API Endpoints
+
+
+# Approvals API Routes
 
 | Method | Endpoint | Description | Auth Required |
 |--------|---------|-------------|---------------|

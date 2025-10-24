@@ -15,6 +15,14 @@ A full-stack MERN application that allows users to manage financial transactions
 - Admin approval dashboard
 - Error handling middleware
 
+## Approvals API Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|---------|-------------|---------------|
+| GET    | `/api/approvals` | Get all approvals (for the logged-in user) | Yes |
+| GET    | `/api/approvals/pending` | Get all pending approvals (admin only) | Yes |
+| PUT    | `/api/approvals/:id/approve` | Approve a transaction by ID | Yes |
+| PUT    | `/api/approvals/:id/reject` | Reject a transaction by ID | Yes |
 
 
 

@@ -16,8 +16,9 @@ A full-stack MERN application that allows users to manage financial transactions
 - Error handling middleware
 
 
+# CRUD Routes
 
-# Approvals API Routes
+## Approvals API Routes
 
 | Method | Endpoint | Description | Auth Required |
 |--------|---------|-------------|---------------|
